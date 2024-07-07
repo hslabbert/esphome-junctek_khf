@@ -203,7 +203,9 @@ void JuncTekKHF::handle_line()
 
 bool JuncTekKHF::readline()
 {
+  ESP_LOGD("JunkTekKHF", "In readline()");
   while (available()) {
+    ESP_LOGD("JunkTekKHF", "In available() inside readline()");
     const char readch = read();
     if (readch > 0) {
       ESP_LOGD("JunkTekKHF", "got readch > 0 in readline()");
@@ -220,6 +222,9 @@ bool JuncTekKHF::readline()
             this->line_buffer_[this->line_pos_] = 0;
           }
       }
+    }
+    else {
+      ESP_LOGD("JunkTekKHF", "In else branch for readch > 0 in readline(). Channel must be empty");
     }
   }
   return false;
