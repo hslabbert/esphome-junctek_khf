@@ -203,7 +203,6 @@ void JuncTekKHF::handle_line()
 
 bool JuncTekKHF::readline()
 {
-  ESP_LOGD("JunkTekKHF", "In readline()");
   while (available()) {
     ESP_LOGD("JunkTekKHF", "In available() inside readline()");
     const char readch = read();
