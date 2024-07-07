@@ -187,6 +187,7 @@ void JuncTekKHF::handle_line()
 {
   //A failure in parsing will return back to here with a non-zero value
   if (setjmp(parsing_failed))
+    ESP_LOGD("JunkTekKHF", "Parsing failed in handle_line()");
     return;
   
   const char* buffer = &this->line_buffer_[0];
@@ -203,8 +204,10 @@ void JuncTekKHF::handle_line()
 bool JuncTekKHF::readline()
 {
   while (available()) {
+    ESP_LOGD("JunkTekKHF", "In available() inside readline()");
     const char readch = read();
     if (readch > 0) {
+      ESP_LOGD("JunkTekKHF", "got readch > 0 in readline()");
       switch (readch) {
         case '\n': // Ignore new-lines
           break;
@@ -218,6 +221,9 @@ bool JuncTekKHF::readline()
             this->line_buffer_[this->line_pos_] = 0;
           }
       }
+    }
+    else {
+      ESP_LOGD("JunkTekKHF", "In else branch for readch > 0 in readline(). Channel must be empty");
     }
   }
   return false;
@@ -237,10 +243,11 @@ bool JuncTekKHF::verify_checksum(int checksum, const char* buffer)
 
 void JuncTekKHF::loop()
 {
-  const uint32_t long start_time = esphome::millis();
+  const uint32_t start_time = esphome::millis();
 
   if (!this->last_settings_ || (*this->last_settings_ + (30 * 1000)) < start_time)
   {
+    ESP_LOGD("JunkTekKHF", "Entering R51 write loop");
     this->last_settings_ = start_time;
     char buffer[20];
     sprintf(buffer, ":R51=%d,2,1,\r\n", this->address_);
@@ -249,6 +256,7 @@ void JuncTekKHF::loop()
 
   if (!this->last_stats_ || (*this->last_stats_ + (10 * 1000)) < start_time)
   {
+    ESP_LOGD("JunkTekKHF", "Entering R50 write loop");
     this->last_stats_ = start_time;
     char buffer[20];
     sprintf(buffer, ":R50=%d,2,1,\r\n", this->address_);
@@ -257,6 +265,7 @@ void JuncTekKHF::loop()
 
   if (readline())
   {
+    ESP_LOGD("JunkTekKHF", "Entered readline() true in main loop()");
     handle_line();
   }
 }
