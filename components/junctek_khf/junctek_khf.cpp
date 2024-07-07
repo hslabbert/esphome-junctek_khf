@@ -240,7 +240,7 @@ bool JuncTekKHF::verify_checksum(int checksum, const char* buffer)
 
 void JuncTekKHF::loop()
 {
-  const unsigned long start_time = millis();
+  const unsigned long start_time = uint32_t esphome::millis();
 
   if (!this->last_settings_ || (*this->last_settings_ + (30 * 1000)) < start_time)
   {
