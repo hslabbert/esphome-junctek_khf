@@ -207,6 +207,7 @@ bool JuncTekKHF::readline()
   while (available()) {
     const char readch = read();
     if (readch > 0) {
+      ESP_LOGD("JunkTekKHF", "got readch > 0 in readline()");
       switch (readch) {
         case '\n': // Ignore new-lines
           break;
