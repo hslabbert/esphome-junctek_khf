@@ -243,6 +243,7 @@ void JuncTekKHF::loop()
 
   if (!this->last_settings_ || (*this->last_settings_ + (30 * 1000)) < start_time)
   {
+    ESP_LOGD("JunkTekKHF", "Entering R51 write loop");
     this->last_settings_ = start_time;
     char buffer[20];
     sprintf(buffer, ":R51=%d,2,1,\n", this->address_);
@@ -251,6 +252,7 @@ void JuncTekKHF::loop()
 
   if (!this->last_stats_ || (*this->last_stats_ + (10 * 1000)) < start_time)
   {
+    ESP_LOGD("JunkTekKHF", "Entering R50 write loop");
     this->last_stats_ = start_time;
     char buffer[20];
     sprintf(buffer, ":R50=%d,2,1,\n", this->address_);
@@ -259,6 +261,7 @@ void JuncTekKHF::loop()
 
   if (readline())
   {
+    ESP_LOGD("JunkTekKHF", "Entered readline() true in main loop()");
     handle_line();
   }
 }
