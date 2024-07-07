@@ -194,7 +194,7 @@ void JuncTekKHF::handle_line()
   if (buffer[0] != ':' || buffer[1] != 'r')
     return;
   if (strncmp(&buffer[2], "50=", 3) == 0)
-    ESP_LOGD("JunkTekKHF", "Got buffer with value 50 in handle_line() in buffer %s", buffer);
+    ESP_LOGD("JunkTekKHF", "Got buffer with value 50 in handle_line() in buffer %s", &buffer);
     handle_status(&buffer[5]);
   else if (strncmp(&buffer[2], "51=", 3) == 0)
     handle_settings(&buffer[5]);
@@ -240,7 +240,7 @@ bool JuncTekKHF::verify_checksum(int checksum, const char* buffer)
 
 void JuncTekKHF::loop()
 {
-  const uint32_t long start_time = esphome::millis();
+  const uint32_t start_time = esphome::millis();
 
   if (!this->last_settings_ || (*this->last_settings_ + (30 * 1000)) < start_time)
   {
